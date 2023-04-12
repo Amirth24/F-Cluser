@@ -5,10 +5,15 @@ import numpy as np
 
 from PIL import Image
 
+from tensorflow.keras.models import load_model
+
 @st.cache_resource
 def get_mtcnn():
     return mtcnn.MTCNN()
 
+@st.cache_resource
+def get_embed_model():
+    return load_model('model/keras_facenet.h5')
 
 def process_image(image_files):
     n_images = len(image_files)
@@ -59,3 +64,11 @@ def process_image(image_files):
 
     st.write('The Shape of face tensors', face_tensors.shape)
     st.write('Face Samples detected', face_tensors.shape[0])
+
+
+    # Load the model
+    model = get_embed_model()
+
+
+    st.write(model.inputs)
+    st.write(model.outputs)
