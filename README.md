@@ -1,8 +1,8 @@
-# Gallery Classifier
+# Face Classifier
 
 ## Introduction
 
-Gallery classifier is an application to classify images on one's gallery by recognizing people faces from the images using face embedding.
+Face classifier is an application to classify images based on people faces in the images using face embedding.
 
 ## What is Face Embedding?
 
