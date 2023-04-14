@@ -50,19 +50,23 @@ def process_image(image_files):
 
     imgs = []
 
-    read_image_progress = st.progress(0)
 
-
+    imgs_tab, tab2, summary = st.tabs(['Uploaded Images', 'Next Tab', 'Summary'])
+    read_image_progress =tab2.progress(0)
+    imgs_col = imgs_tab.columns(2)
     for i , file_ in enumerate(image_files):
-        
-        imgs.append(read_image(file_))
+        img = read_image(file_)
+        imgs_col[i%2].image(img, use_column_width='auto')
+        imgs.append(img)
         read_image_progress.progress(i/(n_images-1), 'Reading Files')
 
     read_image_progress.empty()
         
     faces  = []
     face_detector = get_mtcnn()
-    detect_face_progress = st.progress(0)
+    detect_face_progress = tab2.progress(0)
+
+    faces_data = pd.DataFrame(columns=['img_index', 'face_index'], )
 
     for i , img in enumerate(imgs):
             
