@@ -8,6 +8,11 @@ from PIL import Image
 
 from tensorflow.keras.models import load_model
 
+from core.classifier import Classifier
+
+__author__ = 'Amirth24'
+
+
 @st.cache_resource
 def get_mtcnn():
     return mtcnn.MTCNN()
@@ -45,6 +50,7 @@ def extract_faces(img, _mdl):
     return faces
 
 
+
 @st.cache_data(show_spinner=False)
 def process_image(image_files):
     n_images = len(image_files)
@@ -74,33 +80,44 @@ def process_image(image_files):
         faces_detected = extract_faces(img, face_detector)
 
         for k in range(len(faces_detected)):
+            print(faces_detected[k].max())
             faces_data = faces_data.append({
                 'img_index': i, 'face_index' : k
             } , ignore_index=True)
 
         faces.extend(faces_detected)
 
+
         detect_face_progress.progress(i/(n_images-1),'Extracting Faces from the images')
 
     detect_face_progress.empty()
-    face_tensors = np.vstack(faces)
+    faces_tensor = np.vstack(faces)
 
-    tab2.table(faces_data)
 
 
     # Load the model
     model = get_embed_model()
 
-    face_embeds = model.predict(face_tensors)
+    face_embeds = model.predict(faces_tensor)
 
 
+    classifier = Classifier()
+
+    classifier.fit(face_embeds)
 
 
+    face_labels = classifier.cluster_labels_
 
-    write_summary(summary, n_images, face_embeds.shape[0], 0)
+    n_faces = classifier.n_clusters
+
+    faces_data['labels'] = classifier.predict(face_embeds)
+    tab2.table(faces_data)
+
+
+    write_summary(summary, n_images, face_embeds.shape[0], n_faces)
     
 
-def write_summary(tab,n_images, n_f_samples, n_faces,):
+def write_summary(tab,n_images, n_f_samples, n_faces):
     summary = pd.DataFrame({
         'Values' :[n_images, n_f_samples, n_faces]
     }
