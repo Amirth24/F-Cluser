@@ -85,4 +85,20 @@ def process_image(image_files):
 
     face_embeds = model.predict(face_tensors)
 
+
+
+
+
+    write_summary(summary, n_images, face_embeds.shape[0], 0)
+    
+
+def write_summary(tab,n_images, n_f_samples, n_faces,):
+    summary = pd.DataFrame({
+        'Values' :[n_images, n_f_samples, n_faces]
+    }
+    ,index= ['No. of Images', 'No. of Face Samples', 'No. of Faces Found']
+    )
+
+
+    tab.table(summary)
     
