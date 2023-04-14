@@ -15,12 +15,12 @@ def get_mtcnn():
 def get_embed_model():
     return load_model('model/keras_facenet.h5')
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def read_image(image):
     img = Image.open(image)
     return np.array(img)
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def extract_faces(img, _mdl):
     face_detected = _mdl.detect_faces(img)
 
@@ -44,7 +44,7 @@ def extract_faces(img, _mdl):
     return faces
 
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def process_image(image_files):
     n_images = len(image_files)
 
