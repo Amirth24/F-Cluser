@@ -2,6 +2,7 @@ import mtcnn
 import streamlit as st
 
 import numpy as np
+import pandas as pd
 
 from PIL import Image
 
@@ -69,15 +70,22 @@ def process_image(image_files):
     faces_data = pd.DataFrame(columns=['img_index', 'face_index'], )
 
     for i , img in enumerate(imgs):
-            
-        faces.extend(extract_faces(img, face_detector))
+        
+        faces_detected = extract_faces(img, face_detector)
+
+        for k in range(len(faces_detected)):
+            faces_data = faces_data.append({
+                'img_index': i, 'face_index' : k
+            } , ignore_index=True)
+
+        faces.extend(faces_detected)
 
         detect_face_progress.progress(i/(n_images-1),'Extracting Faces from the images')
 
     detect_face_progress.empty()
     face_tensors = np.vstack(faces)
 
-
+    tab2.table(faces_data)
 
 
     # Load the model
