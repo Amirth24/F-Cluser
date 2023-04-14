@@ -1,11 +1,11 @@
 import streamlit as st
+from core import process_image
 
 st.set_page_config(
     layout='wide',
     page_icon='👁️'
 )
 
-from core import process_image
 
 uploaded_files = None
 def run_process():
