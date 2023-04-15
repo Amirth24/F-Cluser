@@ -3,10 +3,14 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python>=3.10
-  - scikit-learn=1.0.2
-  - pip>=21.0
+  - python>=3.8
+  - scikit-learn
+  - numpy
+  - pandas
+  - conda
+  - pip
   - pip:
-    - mtcnn==0.1.1
+    - mtcnn
     - tensorflow==2.10.0
+    - streamlit
     
