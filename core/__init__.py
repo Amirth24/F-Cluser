@@ -59,7 +59,7 @@ def process_image(image_files):
     imgs = []
 
 
-    imgs_tab, result_tab, summary, next_tab = st.tabs(['Uploaded Images', 'Results', 'Summary', 'next tab'])
+    imgs_tab, result_tab, summary = st.tabs(['Uploaded Images', 'Results', 'Summary'])
     read_image_progress =result_tab.progress(0)
     imgs_col = imgs_tab.columns(2)
     for i , file_ in enumerate(image_files):
