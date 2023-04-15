@@ -1,0 +1,8 @@
+libopencv-dev   
+libglu1
+libglu1-dev
+libpng-dev
+libjpeg-dev
+libopenexr-dev
+libwebp-dev
+libtiff-dev
