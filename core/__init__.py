@@ -9,6 +9,7 @@ from PIL import Image
 from tensorflow.keras.models import load_model
 
 from core.classifier import Classifier
+from core.resultCard import ResultCard
 
 __author__ = 'Amirth24'
 
@@ -112,11 +113,19 @@ def process_image(image_files):
     n_faces = classifier.n_clusters
 
     faces_data['labels'] = classifier.predict(face_embeds)
-    tab2.table(faces_data)
+    # next_tab.table(faces_data)
 
-
+    # Show Results
+    show_results( result_tab, faces_data,imgs, faces_full)
     write_summary(summary, n_images, face_embeds.shape[0], n_faces)
     
+def show_results(tab, faces_df,imgs, faces):
+    ResultCard.set_data(faces_df)
+    ResultCard.set_faces(faces)
+    ResultCard.set_imgs(imgs)
+    for i in np.unique(faces_df['labels']):
+        result = ResultCard(i, tab)
+        result.show()
 
 def write_summary(tab,n_images, n_f_samples, n_faces):
     summary = pd.DataFrame({
