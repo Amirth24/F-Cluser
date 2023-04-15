@@ -31,6 +31,7 @@ def extract_faces(img, _mdl):
     face_detected = _mdl.detect_faces(img)
 
     faces = []
+    faces_full = []
     for face in face_detected:
         x1, y1, width, height = face['box']
 
@@ -38,7 +39,7 @@ def extract_faces(img, _mdl):
         x2, y2 = x1 + width, y1 + height
 
         face_detected_img = img[y1:y2, x1:x2]
-        
+        faces_full.append(face_detected_img)
         pil_img = Image.fromarray(face_detected_img)
         resized_img = pil_img.resize((160, 160))
 
@@ -47,19 +48,18 @@ def extract_faces(img, _mdl):
         face_img =( face_img - mean)/ std # z Scale
         face_img = np.expand_dims(face_img, axis=0)
         faces.append(face_img)
-    return faces
+        
+    return zip(faces, faces_full)
 
-
-
-@st.cache_data(show_spinner=False)
+@st.cache_resource
 def process_image(image_files):
     n_images = len(image_files)
 
     imgs = []
 
 
-    imgs_tab, tab2, summary = st.tabs(['Uploaded Images', 'Next Tab', 'Summary'])
-    read_image_progress =tab2.progress(0)
+    imgs_tab, result_tab, summary, next_tab = st.tabs(['Uploaded Images', 'Results', 'Summary', 'next tab'])
+    read_image_progress =result_tab.progress(0)
     imgs_col = imgs_tab.columns(2)
     for i , file_ in enumerate(image_files):
         img = read_image(file_)
@@ -70,22 +70,25 @@ def process_image(image_files):
     read_image_progress.empty()
         
     faces  = []
+    faces_full = []
     face_detector = get_mtcnn()
-    detect_face_progress = tab2.progress(0)
+    detect_face_progress = result_tab.progress(0)
 
-    faces_data = pd.DataFrame(columns=['img_index', 'face_index'], )
-
+    faces_data = pd.DataFrame(columns=['index', 'img_index', 'face_index'], )
+    counter = 0 
     for i , img in enumerate(imgs):
         
         faces_detected = extract_faces(img, face_detector)
 
-        for k in range(len(faces_detected)):
-            print(faces_detected[k].max())
+        for k, fs in enumerate(faces_detected):
+            f_detected, face_full= fs
             faces_data = faces_data.append({
+                'index': counter,
                 'img_index': i, 'face_index' : k
             } , ignore_index=True)
-
-        faces.extend(faces_detected)
+            faces.append(f_detected)
+            faces_full.append(face_full)
+            counter += 1
 
 
         detect_face_progress.progress(i/(n_images-1),'Extracting Faces from the images')
@@ -105,8 +108,6 @@ def process_image(image_files):
 
     classifier.fit(face_embeds)
 
-
-    face_labels = classifier.cluster_labels_
 
     n_faces = classifier.n_clusters
 
