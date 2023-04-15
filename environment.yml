@@ -7,7 +7,7 @@ dependencies:
   - scikit-learn
   - pip
   - pip:
-    - mtcnn
+    - mtcnn==0.1.0
     - tensorflow
     - streamlit
     
