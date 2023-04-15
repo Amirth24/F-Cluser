@@ -1,12 +1,13 @@
-name: face-classifier
+
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python==3.10
   - scikit-learn
+  - pip
   - pip:
-    - mtcnn==0.1.1
-    - tensorflow==2.10.0
+    - mtcnn
+    - tensorflow
     - streamlit
     
