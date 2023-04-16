@@ -14,7 +14,9 @@ def run_process():
     else:
         process_image(uploaded_files)
         
-
+        
+st.sidebar.header('Face Classifier')
+st.sidebar.write('Upload the files using the below section and click **Process** to Classify the images')
 uploaded_files = st.sidebar.file_uploader('Upload Images', accept_multiple_files=True, type=["png","jpg","jpeg"])
 
 process_btn = st.sidebar.button('Process', on_click=run_process)

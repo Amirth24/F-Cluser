@@ -54,6 +54,9 @@ def extract_faces(img, _mdl):
 
 @st.cache_resource
 def process_image(image_files):
+    # Load the model
+    model = get_embed_model()
+
     n_images = len(image_files)
 
     imgs = []
@@ -99,9 +102,7 @@ def process_image(image_files):
 
 
 
-    # Load the model
-    model = get_embed_model()
-
+    # Convert Face Samples into embeds
     face_embeds = model.predict(faces_tensor)
 
 
