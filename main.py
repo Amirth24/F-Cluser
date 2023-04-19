@@ -3,6 +3,7 @@ from core import process_image
 
 st.set_page_config(
     layout='wide',
+    page_title='Face Classifier',
     page_icon='👁️'
 )
 
