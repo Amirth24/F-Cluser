@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Face classifier is an application to classify images based on people faces in the images using face embedding.
+Face classifier is an application to classify images based on people faces in the images using face embedding. This can be used to match faces from a very large database more efficiently.
 
 ## What is Face Embedding?
 
